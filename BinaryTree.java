@@ -224,6 +224,14 @@ public class BinaryTree {
 
         // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
         // BINARY TREE (WHICH IS BASED ON RECURSION)
+        if(node == null){return;}
+
+        if(node.data == oldVal){
+            node.data = newVal;
+        }
+
+        replaceValueHelper(node.left, oldVal, newVal);
+        replace(node.left, oldVal, newVal);
 
     }
 
@@ -247,7 +255,12 @@ public class BinaryTree {
         // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
         // BINARY TREE (WHICH IS BASED ON RECURSION)
 
-        return Integer.MAX_VALUE;
+        if(node == null){return Integer.MAX_VALUE;}
+
+        int leftMin = findMinHelper(node.left);
+        int rightMin = findMinHelper(node.right);
+
+        return Math.min(node.data,Math.min(leftMin,rightMin) );
     }
 
 
@@ -271,8 +284,12 @@ public class BinaryTree {
 
         // RETURNING -1 IN THIS STUB, WHICH WILL FAIL ALL TESTS. REPLACE IT WITH YOUR CODE
 
-
-        return -1;
+        if (node == null) return 0;
+    
+        int count = (node.data > val) ? 1 : 0;
+        count += nodesGTHelper(node.left, val);
+        count += nodesGTHelper(node.right, val);
+        return count;
     }
 
 
@@ -298,7 +315,10 @@ public class BinaryTree {
      */
 
     public double average() {
-        int[] sumAndCount = averageHelper(root);
+        int[] sumAndCount = averageHelper(root);\
+        if (sumAndCount[1] == 0) {
+            return 0.0;
+        }
         return (double) sumAndCount[0] / sumAndCount[1];
     }
 
@@ -310,7 +330,15 @@ public class BinaryTree {
         // RECALL, IF THE TREE IS EMPTY, RETURN 0 FOR BOTH THE SUM AND
         // COUNT LOCATIONS IN THE RETURNED ARRAY AS SHOWN BELOW, ELSE
         // THE 'SUM' IS RETURNED IN INDEX LOCATION 0, AND COUNT IS LOCATION 1
+        if(n == null){
+            return new int[]{0, 0};
+        }
 
-        return new int[]{0, 0};
+        int[] left = averageHelper(n.left);
+        int[] right = averageHelper(n.right);
+
+        int sum = left[0] + right[0] + n.data;
+        int count = left[1] + right[1] + 1;
+        return new int[]{sum, count};
     }
 }
